@@ -549,7 +549,7 @@ if php_folding != 1
 endif
 
 " Class Keywords
-syn keyword phpType class abstract extends interface implements static final var public private protected const trait contained
+syn keyword phpType class abstract extends interface implements static final var public private protected readonly const trait contained
 
 " Magic Methods
 syn keyword phpStatement __construct __destruct __call __callStatic __get __set __isset __unset __sleep __wakeup __toString __invoke __set_state __clone contained
@@ -664,6 +664,9 @@ else
   syn match phpComment  "//.\{-}$"  contained contains=phpTodo,@Spell
   syn match phpComment  "//.\{-}?>"me=e-2 contained contains=phpTodo,@Spell
 endif
+
+" Attributes
+syn region phpAttribute start="#\[" end="\]" contained keepend contains=@phpClConst
 
 " String
 if (exists("php_parent_error_open") && php_parent_error_open)
@@ -882,7 +885,7 @@ syn match phpYieldFromKeyword /\<from\>/ contained
 
 " Clusters
 syn cluster phpClConst contains=phpFunctions,phpClasses,phpStaticClasses,phpIdentifier,phpStatement,phpKeyword,phpOperator,phpSplatOperator,phpStringSingle,phpStringDouble,phpBacktick,phpNumber,phpType,phpNullValue,phpBoolean,phpStructure,phpMethodsVar,phpConstants,phpException,phpSuperglobals,phpMagicConstants,phpServerVars
-syn cluster phpClInside contains=@phpClConst,phpComment,phpDocComment,phpParent,phpParentError,phpInclude,phpHereDoc,phpNowDoc
+syn cluster phpClInside contains=@phpClConst,phpAttribute,phpComment,phpDocComment,phpParent,phpParentError,phpInclude,phpHereDoc,phpNowDoc
 syn cluster phpClFunction contains=@phpClInside,phpDefine,phpParentError,phpStorageClass,phpKeyword
 syn cluster phpClControl contains=phpFoldIfContainer,phpFoldWhile,phpFoldDoWhile,phpFoldFor,phpFoldForeach,phpFoldTryContainer,phpFoldSwitch
 syn cluster phpClTop contains=@phpClFunction,@phpClControl,phpFoldFunction,phpFoldClass,phpFoldInterface,phpFoldHtmlInside
@@ -962,6 +965,7 @@ endif
 " For version 5.8 and later: only when an item doesn't have highlighting yet
 if !exists("did_php_syn_inits")
 
+  hi def link phpAttribute        PreProc
   hi def link phpComment          Comment
   hi def link phpMagicConstants   Constant
   hi def link phpServerVars       Constant
